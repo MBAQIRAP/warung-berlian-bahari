@@ -13,7 +13,7 @@ import {
 
 import { colors } from '../../utils'
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-reanimated-table';
-import { IconEdit, IconPassword, IconUser } from '../../components';
+import { IconEdit, IconPassword, IconUser} from '../../components';
 const User = ({navigation}) => {
     tableHead= ['Nama', 'Role', 'Password', 'Action'];
     tableData= [
