@@ -13,14 +13,14 @@ import {
 
 import { colors } from '../../utils'
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-reanimated-table';
-import { IconEdit, IconPassword, IconUser} from '../../components';
+import { IconDelete, IconEdit, IconPassword, IconUser} from '../../components';
 const User = ({navigation}) => {
     tableHead= ['Nama', 'Role', 'Password', 'Action'];
     tableData= [
-        ['1', '2', '3', <View style={styles.action}><IconUser/><IconPassword></IconPassword></View>],
-        ['a', 'b', 'c', <View style={styles.action}><IconUser/><IconPassword></IconPassword></View>],
-        ['1', '2', '3', <View style={styles.action}><IconUser/><IconPassword></IconPassword></View>],
-        ['a', 'b', 'c', <View style={styles.action}><IconUser/><IconPassword></IconPassword></View>]
+        ['Baqir', 'Admin', 'baqir123', <View style={styles.action}><IconEdit/><IconDelete/></View>],
+        ['Awi', 'Admin', 'awi123', <View style={styles.action}><IconEdit/><IconDelete/></View>],
+        ['Karayawan1', 'Kasir', 'k123', <View style={styles.action}><IconEdit/><IconDelete/></View>],
+        ['Karyawan2', 'Kasir', 'k231', <View style={styles.action}>\<IconEdit/><IconDelete/></View>]
       ];
     return(
         <SafeAreaView style={styles.SafeAreaView}>
@@ -30,7 +30,7 @@ const User = ({navigation}) => {
                 </Pressable>
                 <View>
                     <Table borderStyle={{borderWidth: 1, borderColor: 'black'}} style={styles.TableUser}>
-                        <Row data={tableHead} textStyle={styles.TextTable} />
+                        <Row data={tableHead} textStyle={styles.TextTableHeader} />
                         <Rows data={tableData} textStyle={styles.TextTable}/>
                     </Table>
                 </View>
@@ -53,14 +53,19 @@ const styles = StyleSheet.create({
         width : 350,
         paddingVertical: 5,
         borderRadius: 5,
-        marginBottom : 30,
+        marginBottom : 20,
         marginTop : 20
     },
     TextTambahUser : {
         textAlign : "center",
     },
+    TextTableHeader : {
+        textAlign : 'center',
+        fontWeight: 'bold'
+    },
     TextTable : {
-        textAlign : 'center'
+        textAlign : 'center',
+        fontSize: 12,
     },
     TableUser : {
         width : "auto"
@@ -68,5 +73,6 @@ const styles = StyleSheet.create({
     action : {
         flexDirection: 'row',
         justifyContent: 'center',
+        gap: 4,
     }
 })
