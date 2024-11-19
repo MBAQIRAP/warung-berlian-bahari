@@ -13,7 +13,8 @@ import {
 
 import { colors } from '../../utils'
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-reanimated-table';
-import { IconDelete, IconEdit, IconPassword, IconUser} from '../../components';
+import { IconDelete, IconEdit, IconPassword, IconUser, ModalTambahUser} from '../../components';
+
 const User = ({navigation}) => {
     tableHead= ['Nama', 'Role', 'Password', 'Action'];
     tableData= [
@@ -45,7 +46,9 @@ const styles = StyleSheet.create({
     SafeAreaView : {
         flex : 1,
         justifyContent : 'center',
-        alignItems : 'center'
+        alignItems : 'center',
+        margin : 0,
+        padding : 0
     },
     PressableTambahUser : {
         alignSelf : "center",
