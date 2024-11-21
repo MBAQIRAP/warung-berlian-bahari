@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { Login, Splash, User } from '../pages';
+import { Login, Splash, User, Kas } from '../pages';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import  {CustomDrawer, IconUser, IconMenu, IconPengeluaran, IconPemasukan, IconLaporan, IconKas} from '../components';
 
@@ -14,7 +14,7 @@ const Routers = () => {
                 animation: 'fade'
             }}>
             <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="User" component={Drawers} />
+            <Stack.Screen name="Drawers" component={Drawers}/>
         </Stack.Navigator>
     )
 }
@@ -22,7 +22,7 @@ const Routers = () => {
 const Drawers = () => {
     const Drawer = createDrawerNavigator();
     return(
-        <Drawer.Navigator initialRouteName='User' 
+        <Drawer.Navigator initialRouteName='User'
             drawerContent={props => <CustomDrawer {...props} />}
             screenOptions={{
                 drawerActiveBackgroundColor : 'rgba(94, 94, 94, 0.36)',
@@ -62,7 +62,7 @@ const Drawers = () => {
                     <IconLaporan/>
                 ),
             }}/>
-            <Drawer.Screen name='Kas' component={User} options={{
+            <Drawer.Screen name='Kas' component={Kas} options={{
                 drawerIcon : ({focused, size}) => (
                     <IconKas/>
                 ),

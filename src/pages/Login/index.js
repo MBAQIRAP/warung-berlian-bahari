@@ -19,7 +19,7 @@ function Login({navigation}) {
   const [password, setPassword] = useState('');
 
   function _buttonLogin() {
-    navigation.navigate("User")
+    navigation.navigate("Drawers")
   }
 
   return (
