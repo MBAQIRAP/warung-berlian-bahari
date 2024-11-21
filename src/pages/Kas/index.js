@@ -108,19 +108,18 @@ const Kas = () => {
                 </View>
                 <View style={{flex: 1, flexDirection: 'row'}}>
                   <Text style={styles.ViewRiwayatText}>Rp 100.000</Text>
-                  <View style={styles.ViewIcon}><IconEdit/></View>
-                  
+                  <TouchableOpacity onPress={() => {setIsShowingModalEdit(true)}} style={styles.ViewIcon}><IconEdit/></TouchableOpacity>
                 </View>
               </View>
     )
   }
 
-  const ModalKas = ({title}) => {
+  const ModalKasTambah = () => {
     return(
-        <Modal visible={isShowingModal} transparent={true}>
+        <Modal visible={isShowingModalTambah} transparent={true}>
             <View style={styles.ModalBackground}>
                 <View style={styles.ModalView}>
-                    <Text style={styles.ModalHeader}>{title}</Text>
+                    <Text style={styles.ModalHeader}>Tambah Data Kas</Text>
                     <Text style={styles.ModalLabelInput}>Asal Kas</Text>
                     <TextInput style={styles.ModalTextInput} onChange={(text) => setAsal(text)}/>
                     <Text style={styles.ModalLabelInput}>Tujuan Kas</Text>
@@ -128,7 +127,7 @@ const Kas = () => {
                     <Text style={styles.ModalLabelInput}>Total</Text>
                     <TextInput keyboardType='numeric' style={styles.ModalTextInput} onChange={(text) => setTotal(text)}/>
                     <View style={styles.ModalRowButton}>
-                        <TouchableOpacity style={styles.ModalButtonbatal} onPress={() => {setIsShowingModal(false)}}>
+                        <TouchableOpacity style={styles.ModalButtonbatal} onPress={() => {setIsShowingModalTambah(false)}}>
                             <Text style={styles.ModalButtonText}>Batal</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.ModalButtonTambah}> 
@@ -140,15 +139,43 @@ const Kas = () => {
         </Modal>
     );
   }
-  const [isShowingModal, setIsShowingModal] = useState(false);
-  const [titleModal, setTitleModal] = useState();
+
+  const ModalKasEdit = () => {
+    return (
+      <Modal visible={isShowingModalEdit} transparent={true}>
+            <View style={styles.ModalBackground}>
+                <View style={styles.ModalView}>
+                    <Text style={styles.ModalHeader}>Edit Data Kas</Text>
+                    <Text style={styles.ModalLabelInput}>Asal Kas</Text>
+                    <TextInput style={styles.ModalTextInput} onChange={(text) => setAsal(text)}/>
+                    <Text style={styles.ModalLabelInput}>Tujuan Kas</Text>
+                    <TextInput style={styles.ModalTextInput} onChange={(text)=> setTujuan(text)}/>
+                    <Text style={styles.ModalLabelInput}>Total</Text>
+                    <TextInput keyboardType='numeric' style={styles.ModalTextInput} onChange={(text) => setTotal(text)}/>
+                    <View style={styles.ModalRowButton}>
+                        <TouchableOpacity style={styles.ModalButtonbatal} onPress={() => {setIsShowingModalEdit(false)}}>
+                            <Text style={styles.ModalButtonText}>Simpan</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.ModalButtonTambah}> 
+                            <Text style={styles.ModalButtonTextTambah}>Hapus</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        </Modal>
+    )
+  }
+
+  const [isShowingModalTambah, setIsShowingModalTambah] = useState(false);
+  const [isShowingModalEdit, setIsShowingModalEdit] = useState(false);
   const [asal, setAsal] = useState();
   const [tujuan, setTujuan] = useState();
   const [total, setTotal] = useState();
 
     return (
         <SafeAreaView>
-          <ModalKas title={titleModal}/>
+          <ModalKasTambah/>
+          <ModalKasEdit/>
           <View style={styles.header}>
               <Text style={styles.headerText}>Uang Kas per tanggal 20 Oktober 2024</Text>
               <Text style={styles.headerText}>Uang Kas Toko:     Rp {totalKas.Uang_Kas_Toko}</Text>
@@ -156,7 +183,7 @@ const Kas = () => {
             </View>
             <Text style={styles.riwayat}>Riwayat Transfer</Text>
             <FlatList data={dataKas} renderItem={ListKas} style={{height: "60%"}}/>
-            <TouchableOpacity style={styles.buttonTambah} onPress={() => {setIsShowingModal(true); setTitleModal('Tambah Data Kas')}}>
+            <TouchableOpacity style={styles.buttonTambah} onPress={() => {setIsShowingModalTambah(true)}}>
               <Text style={styles.buttonText}>Tambah Rincian Transfer</Text>
             </TouchableOpacity>
         </SafeAreaView>

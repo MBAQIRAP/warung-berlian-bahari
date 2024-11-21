@@ -5,20 +5,23 @@ import {
     Text,
     StyleSheet,
     Pressable,
+    TouchableOpacity,
 } from 'react-native'
 
 const CustomDrawer =  (props, navigation) => {
     return(
-        <DrawerContentScrollView {...props}>
+        <DrawerContentScrollView {...props} contentContainerStyle={{flexGrow: 1}}>
             <View style={styles.header}>
                 <Text style={styles.text}>Selamat Datang</Text>
                 <Text style={styles.text}>Awi Yunawan Putra</Text>
                 <Text style={styles.text}>Kasir</Text>
             </View>
-            <DrawerItemList {...props}/>
-            <Pressable style={styles.PressableLogout}>
+            <View style={styles.DrawableItemList}>
+                <DrawerItemList {...props}/>
+            </View>
+            <TouchableOpacity style={styles.PressableLogout}>
                     <Text style={styles.TextLogOut}>LogOut</Text>
-            </Pressable>
+            </TouchableOpacity>
         </DrawerContentScrollView>
     );
 }
@@ -26,8 +29,11 @@ const CustomDrawer =  (props, navigation) => {
 export default CustomDrawer
 
 const styles = StyleSheet.create({
+    DrawerSize : {
+        flexDirection: 'col',
+        justifyContent: 'flex-end'
+    },
     header : {
-        flex : 1,
         alignSelf : 'start',
         backgroundColor : "#2A9D00",
         height : 125,
@@ -36,9 +42,8 @@ const styles = StyleSheet.create({
         marginTop: -12,
         justifyContent : 'center'
     },
-    DrawerScrollView : {
-        margin : 0,
-        padding : 0
+    DrawableItemList : {
+        flex: 1
     },
     text : {
         color : 'white',
@@ -52,8 +57,9 @@ const styles = StyleSheet.create({
         fontWeight : 'bold'
     },
     PressableLogout : {
-        position : 'relative',
-        top : 200,
+        width: '100%',
+        justifyContent: 'space-between',
+        alignSelf: 'center',
         marginHorizontal : 0,
         borderColor : '#2A9D00',
         borderWidth: 1,
