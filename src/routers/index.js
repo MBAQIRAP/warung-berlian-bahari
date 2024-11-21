@@ -22,7 +22,7 @@ const Routers = () => {
 const Drawers = () => {
     const Drawer = createDrawerNavigator();
     return(
-        <Drawer.Navigator initialRouteName='User'
+        <Drawer.Navigator initialRouteName='Menu'
             drawerContent={props => <CustomDrawer {...props} />}
             screenOptions={{
                 drawerActiveBackgroundColor : 'rgba(94, 94, 94, 0.36)',

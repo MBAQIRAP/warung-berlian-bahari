@@ -108,7 +108,8 @@ const Kas = () => {
                 </View>
                 <View style={{flex: 1, flexDirection: 'row'}}>
                   <Text style={styles.ViewRiwayatText}>Rp 100.000</Text>
-                  <IconEdit/>
+                  <View style={styles.ViewIcon}><IconEdit/></View>
+                  
                 </View>
               </View>
     )
@@ -141,9 +142,9 @@ const Kas = () => {
   }
   const [isShowingModal, setIsShowingModal] = useState(false);
   const [titleModal, setTitleModal] = useState();
-  const [nama, setAsal] = useState();
-  const [role, setTujuan] = useState();
-  const [password, setTotal] = useState();
+  const [asal, setAsal] = useState();
+  const [tujuan, setTujuan] = useState();
+  const [total, setTotal] = useState();
 
     return (
         <SafeAreaView>
@@ -198,9 +199,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   ViewIcon : {
-    flex : 1,
-    justifyContent: 'center',
-    alignSelf : 'center',
+      justifyContent: 'space-evenly',
+      marginRight: 6,
   },
   buttonTambah : {
     position: 'sticky',
