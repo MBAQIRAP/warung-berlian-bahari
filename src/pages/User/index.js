@@ -61,16 +61,14 @@ const User = ({navigation}) => {
     return(
         <SafeAreaView style={styles.SafeAreaView}>
             <ModalUser title={titleModal}/>
-            <ScrollView>
+            <ScrollView style={{flex: 1}}>
                 <TouchableOpacity style={styles.PressableTambahUser} onPress={() => {setIsShowingModalTambah(true); setTitleModal('Tambah Data User')}}>
                     <Text style={styles.TextTambahUser}>+ Tambah User</Text>
                 </TouchableOpacity>
-                <View>
-                    <Table borderStyle={{borderWidth: 1, borderColor: '#000000'}} style={styles.TableUser}>
-                        <Row data={tableHead} textStyle={styles.TextTableHeader} />
-                        <Rows data={tableData} textStyle={styles.TextTable}/>
-                    </Table>
-                </View>
+                <Table borderStyle={{borderWidth: 1, borderColor: '#000000'}} style={styles.TableUser}>
+                    <Row data={tableHead} textStyle={styles.TextTableHeader} />
+                    <Rows data={tableData} textStyle={styles.TextTable}/>
+                </Table>
             </ScrollView>
         </SafeAreaView>
     )
@@ -80,6 +78,7 @@ export default User
 
 const styles = StyleSheet.create({
     SafeAreaView : {
+        flexDirection: 'col',
         flex : 1,
         justifyContent : 'center',
         alignItems : 'center',
@@ -107,7 +106,8 @@ const styles = StyleSheet.create({
         fontSize: 12,
     },
     TableUser : {
-        width : "auto"
+        width : "100%",
+        alignSelf: 'center',
     },
     action : {
         flexDirection: 'row',

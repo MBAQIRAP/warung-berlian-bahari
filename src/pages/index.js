@@ -6,6 +6,7 @@ import Laporan from "./Laporan"
 import Calculator from "./Menu/Calculator"
 import Transaksi from "./Menu/Transaksi"
 import PaymentMethod from "./Menu/PaymentMethod";
+import Receipt from "./Menu/Receipt";
 
 export {
     Splash,
@@ -16,4 +17,5 @@ export {
     Calculator,
     Transaksi,
     PaymentMethod,
+    Receipt,
 }

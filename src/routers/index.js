@@ -14,7 +14,7 @@ import {
     TouchableOpacity,
     Modal,
   } from 'react-native';
-import { Login, Splash, User, Kas, Laporan, Calculator, Transaksi, PaymentMethod } from '../pages';
+import { Login, Splash, User, Kas, Laporan, Calculator, Transaksi, PaymentMethod, Receipt } from '../pages';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import  {CustomDrawer, IconUser, IconMenu, IconPengeluaran, IconPemasukan, IconLaporan, IconKas,IconEdit, IconCalender} from '../components';
 
@@ -29,8 +29,10 @@ const Routers = () => {
             }}>
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Drawers" component={Drawers}/>
+            <Stack.Screen name="User" component={User} />
             <Stack.Screen name="PaymentMethod" component={PaymentMethod} options={{headerShown: true}}/>
             <Stack.Screen name="Calculator" component={Calculator} options={{headerShown: true}}/>
+            <Stack.Screen name="Receipt" component={Receipt} options={{headerShown: true}}/>
         </Stack.Navigator>
     )
 }
