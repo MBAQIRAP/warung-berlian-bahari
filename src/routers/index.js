@@ -1,8 +1,22 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { Login, Splash, User, Kas } from '../pages';
+import {
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    TextInput,
+    Pressable,
+    Alert,
+    Touchable,
+    TouchableOpacity,
+    Modal,
+  } from 'react-native';
+import { Login, Splash, User, Kas, Laporan, Calculator, Transaksi, PaymentMethod } from '../pages';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import  {CustomDrawer, IconUser, IconMenu, IconPengeluaran, IconPemasukan, IconLaporan, IconKas} from '../components';
+import  {CustomDrawer, IconUser, IconMenu, IconPengeluaran, IconPemasukan, IconLaporan, IconKas,IconEdit, IconCalender} from '../components';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +29,8 @@ const Routers = () => {
             }}>
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Drawers" component={Drawers}/>
+            <Stack.Screen name="PaymentMethod" component={PaymentMethod} options={{headerShown: true}}/>
+            <Stack.Screen name="Calculator" component={Calculator} options={{headerShown: true}}/>
         </Stack.Navigator>
     )
 }
@@ -42,7 +58,7 @@ const Drawers = () => {
                 },
             }}
         > 
-            <Drawer.Screen name='Menu' component={User} options={{
+            <Drawer.Screen name='Menu' component={Transaksi} options={{
                 drawerIcon : ({focused, size}) => (
                     <IconMenu/>
                 ),
@@ -57,10 +73,15 @@ const Drawers = () => {
                     <IconPemasukan/>
                 ),
             }}/>
-            <Drawer.Screen name='Laporan' component={User} options={{
+            <Drawer.Screen name='Laporan' component={Laporan} options={{
                 drawerIcon : ({focused, size}) => (
                     <IconLaporan/>
                 ),
+                headerRight: () => (
+                    <View style={{marginRight: 15}}>
+                        <IconCalender/>
+                    </View>
+                  ),
             }}/>
             <Drawer.Screen name='Kas' component={Kas} options={{
                 drawerIcon : ({focused, size}) => (

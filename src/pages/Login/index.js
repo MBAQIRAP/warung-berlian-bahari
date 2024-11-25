@@ -9,6 +9,7 @@ import {
   TextInput,
   Pressable,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
 
 import {ImageLogin} from '../../assets'
@@ -45,9 +46,9 @@ function Login({navigation}) {
             style={styles.textInputLogin}
           />
         </View>
-        <Pressable style={styles.buttonLogin} onPress={_buttonLogin}>
+        <TouchableOpacity style={styles.buttonLogin} onPress={_buttonLogin}>
           <Text style={styles.textLogin}>Masuk</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

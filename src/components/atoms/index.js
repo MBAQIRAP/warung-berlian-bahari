@@ -8,6 +8,7 @@ import IconPengeluaran from "./IconPengeluaran";
 import IconPemasukan from "./IconPemasukan";
 import IconLaporan from "./IconLaporan";
 import IconKas from "./IconKas";
+import IconCalender from "./IconCalender";
 
 export { 
     Buttons, 
@@ -19,5 +20,6 @@ export {
     IconPengeluaran,
     IconPemasukan,
     IconLaporan,
-    IconKas
+    IconKas,
+    IconCalender
 }

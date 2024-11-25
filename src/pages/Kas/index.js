@@ -16,12 +16,12 @@ import {
 import { IconEdit } from '../../components';
 import { FlatList } from 'react-native-gesture-handler';
 
-const Kas = () => {
+const Kas = (navigation) => {
   const totalKas = {
     Uang_Kas_Toko : 2000000,
     Uang_Kas_Toko_Rekening : 5000000,
   };
-  const dataKas = [
+  const [dataKas,setDataKas] = useState([
     {tgl: 'Kamis, 10 Oktober 2024', kas: 100000},
     {tgl: 'Kamis, 10 Oktober 2024', kas: 200000},
     {tgl: 'Kamis, 10 Oktober 2024', kas: 300000},
@@ -98,16 +98,16 @@ const Kas = () => {
     {tgl: 'Kamis, 10 Oktober 2024', kas: 300000},
     {tgl: 'Kamis, 10 Oktober 2024', kas: 300000},
     {tgl: 'Kamis, 10 Oktober 2024', kas: 300000},
-  ]
-  const ListKas = () => {
+  ]);
+  const ListKas = ({tgl,kas}) => {
     return (
       <View style={styles.ViewContainer}>
                 <View style={{flex: 1}}>
-                  <Text>Kamis, 10 Oktober 2024</Text>
+                  <Text style={{fontSize: 15}}>{tgl}</Text>
                   <Text>Kas Toko -> Kas Rekening</Text>
                 </View>
                 <View style={{flex: 1, flexDirection: 'row'}}>
-                  <Text style={styles.ViewRiwayatText}>Rp 100.000</Text>
+                  <Text style={styles.ViewRiwayatText}>Rp {kas.toLocaleString('id-ID')}</Text>
                   <TouchableOpacity onPress={() => {setIsShowingModalEdit(true)}} style={styles.ViewIcon}><IconEdit/></TouchableOpacity>
                 </View>
               </View>
@@ -182,7 +182,7 @@ const Kas = () => {
               <Text style={styles.headerText}>Uang Kas Rekening:     Rp {totalKas.Uang_Kas_Toko_Rekening}</Text>
             </View>
             <Text style={styles.riwayat}>Riwayat Transfer</Text>
-            <FlatList data={dataKas} renderItem={ListKas} style={{height: "60%"}}/>
+            <FlatList data={dataKas}  renderItem={({item,index})=><ListKas tgl={item.tgl} kas={item.kas}/>} style={{height: "60%"}}/>
             <TouchableOpacity style={styles.buttonTambah} onPress={() => {setIsShowingModalTambah(true)}}>
               <Text style={styles.buttonText}>Tambah Rincian Transfer</Text>
             </TouchableOpacity>
