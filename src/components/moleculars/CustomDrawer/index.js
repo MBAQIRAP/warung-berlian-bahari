@@ -1,25 +1,68 @@
-import { DrawerContent, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
-import React from 'react'
+import {DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+import React, {useState,useEffect} from 'react';
+import { useNavigation } from '@react-navigation/native';
 import {
     View,
     Text,
     StyleSheet,
-    Pressable,
     TouchableOpacity,
-} from 'react-native'
+} from 'react-native';
 
-const CustomDrawer =  (props, navigation) => {
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+
+const CustomDrawer =  (props) => {
+    const navigation = useNavigation(); 
+    const[userNama,setNama] = useState();
+    const[userRole,setRole] = useState();
+    async function AsyncGet(){
+        try {
+          await AsyncStorage.getItem('id')
+          const nama=await AsyncStorage.getItem('nama')
+          await AsyncStorage.getItem('password')
+          const role=await AsyncStorage.getItem('role')
+          if (role !== null) {
+            setRole(role);
+          }
+          if (nama !== null) {
+            setNama(nama);
+          }
+        } catch (e) {
+          // saving error
+        }
+    }
+
+    useEffect(() => {
+        AsyncGet()
+    }, []);
+    
+    const AsyncRemoveItem = async () => {
+            try {
+                await AsyncStorage.removeItem('id')
+                await AsyncStorage.removeItem('nama');
+                await AsyncStorage.removeItem('role');
+                await AsyncStorage.removeItem('password');
+            }
+            catch(exception) {
+               
+            }
+    }
+    const _buttonLogOut = () => {
+        AsyncRemoveItem();
+        navigation.navigate('Login');
+    }
     return(
         <DrawerContentScrollView {...props} contentContainerStyle={{flexGrow: 1}}>
             <View style={styles.header}>
                 <Text style={styles.text}>Selamat Datang</Text>
-                <Text style={styles.text}>Awi Yunawan Putra</Text>
-                <Text style={styles.text}>Kasir</Text>
+                <Text style={styles.text}>{userNama}</Text>
+                <Text style={styles.text}>{userRole}</Text>
             </View>
             <View style={styles.DrawableItemList}>
                 <DrawerItemList {...props}/>
             </View>
-            <TouchableOpacity style={styles.PressableLogout}>
+            <TouchableOpacity onPress={_buttonLogOut} style={styles.PressableLogout}>
                     <Text style={styles.TextLogOut}>LogOut</Text>
             </TouchableOpacity>
         </DrawerContentScrollView>

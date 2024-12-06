@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useLayoutEffect, useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,11 +7,12 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  Alert,
 } from 'react-native';
-import { Alert } from 'react-native';
-import { ImagePlaceHolder } from '../../../assets';
+import {ImagePlaceHolder} from '../../../assets';
+import {IconEdit} from '../../../components';
 
-export default function Transaksi({navigation}) {
+export default function Transaksi({navigation, route}) {
   const [menuItems, setMenuItems] = useState([
     {id: 1, name: 'Es Teh', price: 5000, category: 'Minuman', quantity: 0},
     {id: 2, name: 'Es Jeruk', price: 7000, category: 'Minuman', quantity: 0},
@@ -43,11 +44,54 @@ export default function Transaksi({navigation}) {
       category: 'Makanan',
       quantity: 0,
     },
+    {
+      id: 7,
+      name: 'Kerupuk Udang',
+      price: 5000,
+      category: 'Lain-lain',
+      quantity: 0,
+    },
+    {
+      id: 8,
+      name: 'Kerupuk Kulit',
+      price: 6000,
+      category: 'Lain-lain',
+      quantity: 0,
+    },
+    {
+      id: 9,
+      name: 'Kerupuk Tenggiri',
+      price: 7000,
+      category: 'Lain-lain',
+      quantity: 0,
+    },
   ]);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredItems, setFilteredItems] = useState(menuItems);
   const [selectedCategory, setSelectedCategory] = useState('Semua');
+
+  // Update daftar menu dari hasil edit
+  useEffect(() => {
+    if (route.params?.updatedMenuItems) {
+      setMenuItems(route.params.updatedMenuItems);
+      setFilteredItems(route.params.updatedMenuItems);
+    }
+  }, [route.params?.updatedMenuItems]);
+
+  // Tombol edit di header
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity style={{marginRight: 15}}
+          onPress={() =>
+            navigation.navigate('EditMenu', {menuItems, setMenuItems})
+          }>
+                <IconEdit />
+                </TouchableOpacity>
+      ),
+    });
+  }, [navigation, menuItems]);
 
   // Filter berdasarkan kategori
   const filterByCategory = category => {
@@ -63,7 +107,7 @@ export default function Transaksi({navigation}) {
   const handleSearch = query => {
     setSearchQuery(query);
     if (query === '') {
-      filterByCategory(selectedCategory); // Tetap filter berdasarkan kategori
+      filterByCategory(selectedCategory);
     } else {
       const filtered = filteredItems.filter(item =>
         item.name.toLowerCase().includes(query.toLowerCase()),
@@ -73,22 +117,34 @@ export default function Transaksi({navigation}) {
   };
 
   // Update jumlah pesanan
-  const updateQuantity = (index, type) => {
-    const updatedItems = [...menuItems];
-    if (type === 'increase') {
-      updatedItems[index].quantity += 1;
-    } else if (type === 'decrease' && updatedItems[index].quantity > 0) {
-      updatedItems[index].quantity -= 1;
-    }
+  const updateQuantity = (itemId, type) => {
+    const updatedItems = menuItems.map(item =>
+      item.id === itemId
+        ? {
+            ...item,
+            quantity:
+              type === 'increase'
+                ? item.quantity + 1
+                : Math.max(0, item.quantity - 1),
+          }
+        : item,
+    );
+
     setMenuItems(updatedItems);
-    filterByCategory(selectedCategory);
+    const updatedFilteredItems =
+      selectedCategory === 'Semua'
+        ? updatedItems
+        : updatedItems.filter(item => item.category === selectedCategory);
+
+    setFilteredItems(updatedFilteredItems); // Langsung perbarui tampilan
   };
 
   // Reset transaksi
   const resetTransaction = () => {
     const resetItems = menuItems.map(item => ({...item, quantity: 0}));
     setMenuItems(resetItems);
-    filterByCategory('Semua');
+    setSearchQuery('');
+    setSelectedCategory('Semua');
     setFilteredItems(resetItems);
   };
 
@@ -112,7 +168,7 @@ export default function Transaksi({navigation}) {
 
       {/* Tombol Kategori */}
       <View style={styles.categoryContainer}>
-        {['Semua', 'Makanan', 'Minuman'].map(category => (
+        {['Semua', 'Makanan', 'Minuman', 'Lain-lain'].map(category => (
           <TouchableOpacity
             key={category}
             style={[
@@ -135,12 +191,9 @@ export default function Transaksi({navigation}) {
       <FlatList
         data={filteredItems}
         keyExtractor={item => item.id.toString()}
-        renderItem={({item, index}) => (
+        renderItem={({item}) => (
           <View style={styles.menuItem}>
-            <Image
-              style={styles.image}
-              source={ImagePlaceHolder} // Gambar kosong (placeholder)
-            />
+            <Image style={styles.image} source={ImagePlaceHolder} />
             <View style={styles.menuDetails}>
               <Text style={styles.menuName}>{item.name}</Text>
               <Text style={styles.menuPrice}>
@@ -150,13 +203,13 @@ export default function Transaksi({navigation}) {
             <View style={styles.quantityContainer}>
               <TouchableOpacity
                 style={styles.quantityButton}
-                onPress={() => updateQuantity(index, 'decrease')}>
+                onPress={() => updateQuantity(item.id, 'decrease')}>
                 <Text style={styles.quantityText}>-</Text>
               </TouchableOpacity>
               <Text style={styles.quantityCount}>{item.quantity}</Text>
               <TouchableOpacity
                 style={styles.quantityButton}
-                onPress={() => updateQuantity(index, 'increase')}>
+                onPress={() => updateQuantity(item.id, 'increase')}>
                 <Text style={styles.quantityText}>+</Text>
               </TouchableOpacity>
             </View>
@@ -175,13 +228,13 @@ export default function Transaksi({navigation}) {
         <TouchableOpacity
           style={styles.payButton}
           onPress={() => {
-            const selectedItems = menuItems.filter(item => item.quantity > 0); // Filter langsung item dengan quantity > 0
+            const selectedItems = menuItems.filter(item => item.quantity > 0);
             if (selectedItems.length === 0) {
               Alert.alert('Perhatian', 'Pilih menu terlebih dahulu!');
             } else {
               navigation.navigate('PaymentMethod', {
                 totalPrice: calculateTotal(),
-                selectedItems, // Kirim selectedItems ke halaman berikutnya
+                selectedItems,
               });
             }
           }}>
@@ -195,11 +248,7 @@ export default function Transaksi({navigation}) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    padding: 16,
-  },
+  container: {flex: 1, backgroundColor: '#fff', padding: 16},
   categoryContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -207,20 +256,13 @@ const styles = StyleSheet.create({
   },
   categoryButton: {
     paddingVertical: 12,
-    paddingHorizontal: 28,
+    paddingHorizontal: 15,
     borderRadius: 10,
     backgroundColor: '#ddd',
   },
-  activeCategory: {
-    backgroundColor: 'green',
-  },
-  categoryText: {
-    fontSize: 14,
-    color: '#333',
-  },
-  activeCategoryText: {
-    color: '#fff',
-  },
+  activeCategory: {backgroundColor: 'green'},
+  categoryText: {fontSize: 14, color: '#333'},
+  activeCategoryText: {color: '#fff'},
   searchInput: {
     borderWidth: 1,
     borderColor: '#ddd',
@@ -245,21 +287,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginRight: 16,
   },
-  menuDetails: {
-    flex: 2,
-  },
-  menuName: {
-    fontSize: 16,
-    color: '#333',
-  },
-  menuPrice: {
-    fontSize: 14,
-    color: '#4CAF50',
-  },
-  quantityContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+  menuDetails: {flex: 2},
+  menuName: {fontSize: 16, color: '#333'},
+  menuPrice: {fontSize: 14, color: '#4CAF50'},
+  quantityContainer: {flexDirection: 'row', alignItems: 'center'},
   quantityButton: {
     backgroundColor: '#ddd',
     width: 30,
@@ -268,10 +299,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
   },
-  quantityText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
+  quantityText: {fontSize: 20, fontWeight: 'bold'},
   quantityCount: {
     marginHorizontal: 10,
     fontSize: 16,
@@ -281,33 +309,27 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  payButton: {
-    flex: 1,
-    backgroundColor: 'green',
-    paddingVertical: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginLeft: 5,
+    paddingVertical: 16,
   },
   resetButton: {
+    backgroundColor: '#FF5722',
+    padding: 16,
+    borderRadius: 8,
     flex: 1,
-    backgroundColor: 'red',
-    paddingVertical: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginRight: 5,
+    marginRight: 8,
+  },
+  payButton: {
+    backgroundColor: '#4CAF50',
+    padding: 16,
+    borderRadius: 8,
+    flex: 2,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  emptyText: {
     textAlign: 'center',
-    color: '#999',
-    marginTop: 20,
+    fontWeight: 'bold',
     fontSize: 16,
   },
+  emptyText: {textAlign: 'center', fontSize: 16, color: '#666'},
+  headerButton: {color: 'blue', paddingRight: 10, fontSize: 16},
 });

@@ -1,4 +1,4 @@
-import {React, useState} from 'react';
+import {React, useState, useEffect} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -12,15 +12,67 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import {ImageLogin} from '../../assets'
 import {IconUser, IconPassword} from '../../components'
+import Api from '../../Api'
 
 function Login({navigation}) {
   const [nama, setNama] = useState('');
   const [password, setPassword] = useState('');
 
+  async function AsyncLogin(id,nama,password,role){
+    try {
+      await AsyncStorage.setItem('id',id.toString())
+      await AsyncStorage.setItem('nama', nama)
+      await AsyncStorage.setItem('password', password)
+      await AsyncStorage.setItem('role', role)
+    } catch (e) {
+      // saving error
+    }
+  }
+
+  async function AsyncCheckLogin(){
+    if(await AsyncStorage.getItem('id') !== null){
+      navigation.navigate('Drawers')
+    }
+  }
+
+  useEffect(() => {
+    AsyncCheckLogin()
+}, []);
+
   function _buttonLogin() {
-    navigation.navigate("Drawers")
+    Api.login(nama,password).then(response => {
+      const id = response.data.user[0].id_user;
+      const nama=response.data.user[0].nama_user;
+      const password=response.data.user[0].password_user;
+      const role = response.data.user[0].nama_role
+      if(response.data.message=='success'){
+        if(role=='admin'){
+          AsyncLogin(id,nama,password,role)
+          navigation.navigate("Drawers");
+        }else if(role=='pengelola'){
+          AsyncLogin(id,nama,password,role)
+          navigation.navigate("Drawers");
+        }else{
+          AsyncLogin(id,nama,password,role)
+          navigation.navigate("Drawers");
+        }
+      }else{
+        Alert.alert(response.data.message)
+      }
+    }).catch(error => {
+      console.error("Error sending data: ", error);
+    });
+    /*const users = data.find((user) => user.nama === nama && user.password === password)
+    if(users == undefined){
+      Alert.alert("Username atau Password salah")
+    }else{
+      api.Login(users.nama)
+      navigation.navigate("Drawers", {nama : users.nama, role: users.role});
+    }*/
   }
 
   return (

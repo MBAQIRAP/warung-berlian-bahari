@@ -9,6 +9,10 @@ import IconPemasukan from "./IconPemasukan";
 import IconLaporan from "./IconLaporan";
 import IconKas from "./IconKas";
 import IconCalender from "./IconCalender";
+import IconWallet from './IconWallet';
+import IconGrab from './IconGrab';
+import IconQris from "./IconQris";
+import IconGoFood from "./IconGoFood";
 
 export { 
     Buttons, 
@@ -21,5 +25,9 @@ export {
     IconPemasukan,
     IconLaporan,
     IconKas,
-    IconCalender
+    IconCalender,
+    IconWallet,
+    IconGrab,
+    IconQris,
+    IconGoFood,
 }

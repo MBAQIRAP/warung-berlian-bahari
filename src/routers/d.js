@@ -33,7 +33,7 @@ import {
     OutcomeList
 } from '../pages';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import  {CustomDrawer, IconUser, IconMenu, IconPengeluaran, IconPemasukan, IconLaporan, IconKas,IconEdit, IconCalender} from '../components';
 
 const Stack = createNativeStackNavigator();
@@ -64,35 +64,25 @@ const Routers = () => {
     )
 }
 
-const Drawers = () => {
+const Drawers = ({route}) => {
     const[userNama,setNama] = useState()
     const[userRole,setRole] = useState()
     useEffect(() => {
-        AsyncLogin()
-    }, []);
-
-    async function AsyncLogin(){
-        try {
-          await AsyncStorage.getItem('id')
-          const nama=await AsyncStorage.getItem('nama')
-          await AsyncStorage.getItem('password')
-          const role = await AsyncStorage.getItem('role')
-          if (role !== null) {
-            setRole(role);
-          }
-          if (nama !== null) {
-            setNama(nama);
-          }
-        } catch (e) {
-          // saving error
+        if (route.params) {
+            setNama(route.params.nama);
+            setRole(route.params.role);
         }
-      }
-
-    const Drawer = createDrawerNavigator();
-            if(userRole == 'admin'){
-                return(
+    }, [route.params]);
+    const DrawerRole = () => {
+        const Drawer = createDrawerNavigator();
+        const user= {
+            nama : userNama,
+            role : userRole
+        }
+        if(userRole == 'admin'){
+            return(
                 <Drawer.Navigator initialRouteName='Menu'
-                drawerContent={props => <CustomDrawer {...props}/>}
+                drawerContent={props => <CustomDrawer {...props} user={user} />}
                 screenOptions={{
                     drawerActiveBackgroundColor : 'rgba(94, 94, 94, 0.36)',
                     drawerInactiveTintColor : '#000000',
@@ -147,11 +137,11 @@ const Drawers = () => {
                     ),
                 }}/>
             </Drawer.Navigator>
-                );
+            );
         }else if(userRole == 'pengelola'){
             return(
                 <Drawer.Navigator initialRouteName='Menu'
-                drawerContent={props => <CustomDrawer {...props} />}
+                drawerContent={props => <CustomDrawer {...props} user={user} />}
                 screenOptions={{
                     drawerActiveBackgroundColor : 'rgba(94, 94, 94, 0.36)',
                     drawerInactiveTintColor : '#000000',
@@ -205,7 +195,7 @@ const Drawers = () => {
         }else{
             return(
                 <Drawer.Navigator initialRouteName='Menu'
-                drawerContent={props => <CustomDrawer  {...props}/>}
+                drawerContent={props => <CustomDrawer {...props} user={user} />}
                 screenOptions={{
                     drawerActiveBackgroundColor : 'rgba(94, 94, 94, 0.36)',
                     drawerInactiveTintColor : '#000000',
@@ -237,6 +227,10 @@ const Drawers = () => {
             </Drawer.Navigator>
             );
         }
+    }
+    return(
+        <DrawerRole/>
+    );
 }
 
 
